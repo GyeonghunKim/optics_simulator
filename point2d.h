@@ -87,28 +87,39 @@ public:
         auto dp1 = *this - tmp1;
         auto d1 = dp1.norm2();
 
-        point2D<double> tmp2(floor(x), floor(y));
+        point2D<double> tmp2(floor(x) + 1, floor(y));
         auto dp2 = *this - tmp2;
         auto d2 = dp2.norm2();
 
-        point2D<double> tmp3(floor(x), floor(y));
+        point2D<double> tmp3(floor(x) + 1, floor(y) + 1);
         auto dp3 = *this - tmp3;
         auto d3 = dp3.norm2();
 
-        point2D<double> tmp4(floor(x), floor(y));
+        point2D<double> tmp4(floor(x), floor(y) + 1);
         auto dp4 = *this - tmp4;
         auto d4 = dp4.norm2();
 
-        auto w1 = 1.0 / std::pow(d1, p)
-        auto w2 = 1.0 / std::pow(d2, p)
-        auto w3 = 1.0 / std::pow(d3, p)
-        auto w4 = 1.0 / std::pow(d4, p)
-        auto w_sum = w1 + w2 + w3 + w4
+        auto w1 = 1.0 / std::pow(d1, p);
+        auto w2 = 1.0 / std::pow(d2, p);
+        auto w3 = 1.0 / std::pow(d3, p);
+        auto w4 = 1.0 / std::pow(d4, p);
+        auto w_sum = w1 + w2 + w3 + w4;
+        w1 /= w_sum;
+        w2 /= w_sum;
+        w3 /= w_sum;
+        w4 /= w_sum;
 
-        weights.push_back(w1 / w_sum);
-        weights.push_back(w2 / w_sum);
-        weights.push_back(w3 / w_sum);
-        weights.push_back(w4 / w_sum);
+        if(isnanf(w1)) w1 = 1;
+        if(isnanf(w2)) w2 = 1;
+        if(isnanf(w3)) w3 = 1;
+        if(isnanf(w4)) w4 = 1;
+
+        weights.push_back(w1);
+        weights.push_back(w2);
+        weights.push_back(w3);
+        weights.push_back(w4);
+
+
 
         return weights;
     }
