@@ -18,5 +18,5 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
     */
-    test_gradiend();
+    test_gradiend2();
 }

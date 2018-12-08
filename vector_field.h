@@ -40,10 +40,10 @@ public:
     vectorField(scalarField<T> x_field, scalarField<T> y_field){
         this->x_field = x_field;
         this->y_field = y_field;
-        this->N_col = N_col;
-        this->N_row = N_row;
-        this->dx = dx;
-        this->dy = dy;
+        this->N_col = x_field.get_N_col();
+        this->N_row = x_field.get_N_row();
+        this->dx = x_field.get_dx();
+        this->dy = x_field.get_dy();
     }
     // initialize with two functions which initiaize each component of fields
     vectorField(int N_row, int N_col,
@@ -73,12 +73,28 @@ public:
     }
     // print function
     void print(){
-        std::cout << "( " << std::endl;
+        std::cout << "Vector Field with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
+        std::cout << "dx = " << dx << ", " << "dy = " << dy << std::endl;
+        std::cout << "data: " <<std::endl;
+        std::cout << "x_components: " << std::endl;
         x_field.print();
-        std::cout << "," << std::endl;
+        std::cout << "y_components: " << std::endl;
         y_field.print();
-        std::cout << ")" << std::endl;
     }
+
+    void print_type2(){
+        std::cout << "Vector Field with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
+        std::cout << "dx = " << dx << ", " << "dy = " << dy << std::endl;
+        std::cout << "data: " <<std::endl;
+        for(auto i = 0; i < N_row; ++i){
+            for(auto j = 0; j < N_col; ++j){
+                std::cout << std::setw(10) << "(" << x_field.get_data(i, j) << ", " << y_field.get_data(i, j) << ")";
+            }
+            std::cout << "\n";
+        }
+    }
+
+
     // getter
     auto get_x_field(){
         return x_field;
@@ -115,7 +131,7 @@ auto get_gradient(scalarField<T> s){
             }
         }
     }
-    scalarField<T> grad_x(grad_x_data);
+    scalarField<T> grad_x(grad_x_data, dx, dy);
     matrix<T> grad_y_data(N_row, N_col);
     for(auto i = 0; i < N_row; ++i){
         for(auto j = 0; j < N_col; ++j){
@@ -130,7 +146,7 @@ auto get_gradient(scalarField<T> s){
             }
         }
     }
-    scalarField<T> grad_y(grad_y_data);
+    scalarField<T> grad_y(grad_y_data, dx, dy);
     vectorField<T> tmp(grad_x, grad_y);
     return tmp;
 }

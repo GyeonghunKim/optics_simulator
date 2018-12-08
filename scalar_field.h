@@ -152,18 +152,21 @@ public:
     // transpose the field
     void transpose(){
         auto tmp = data.transpose();
-        this->data = tmp;
+        data = tmp;
     }
 
     // getters
     auto get_N_row(){
-        return this->N_row;
+        return N_row;
     }
     auto get_N_col(){
-        return this->N_col;
+        return N_col;
     }
     auto get_data(){
-        return this->data;
+        return data;
+    }
+    auto get_data(int i, int j){
+        return data.get_data(i, j);
     }
     auto get_dx(){
         return dx;
@@ -176,6 +179,10 @@ public:
         std::cout << "Scalar Field with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
         std::cout << "dx = " << dx << ", " << "dy = " << dy << std::endl;
         std::cout << "data: " <<std::endl;
+        data.print_only_value();
+        std::cout << std::endl;
+    }
+    void print_only_value(){
         data.print_only_value();
         std::cout << std::endl;
     }
