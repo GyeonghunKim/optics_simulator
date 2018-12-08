@@ -4,7 +4,8 @@
 #include "point2d_test.h"
 #include "point2d_series.h"
 #include "point2d_series_test.h"
-
+#include "matrix.h"
+#include "matrix_test.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,5 +16,5 @@ int main(int argc, char *argv[])
 
     return a.exec();
     */
-    test_point2d_series1();
+    test_matrix1();
 }

@@ -104,7 +104,7 @@ public:
 
     // transpose the data
     // destructive function
-    void transpose(){
+    auto transpose(){
         auto tmp_N_row = N_col;
         auto tmp_N_col = N_row;
         std::vector<std::vector<T>> tmp(tmp_N_row, std::vector<T> (tmp_N_col, 0));
