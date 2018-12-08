@@ -35,7 +35,9 @@ HEADERS += \
     point2d_series.h \
     point2d_series_test.h \
     matrix.h \
-    matrix_test.h
+    matrix_test.h \
+    scalar_field.h \
+    scalar_field_test.h
 
 FORMS += \
         mainwindow.ui

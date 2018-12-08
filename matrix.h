@@ -34,7 +34,12 @@ public:
         this->N_row = N_row;
         data = tmp;
     }
-
+    //initialization with std::vector<std::vector<T>>
+    matrix(std::vector<std::vector<T>> m) {
+        this->N_col = m.size();
+        this->N_row = m[0].size();
+        data = m;
+    }
     // print function
     void print(){
         auto siz1 = data.size();
@@ -95,6 +100,17 @@ public:
         tmp.N_col = tmp_N_col;
         return tmp;
     }
+
+    matrix operator*(const T c){
+        matrix<T> tmp(data);
+        auto tmp_k = N_col;
+        for(auto i = 0; i < N_row; ++i){
+            for(auto j = 0; j < N_col; ++j){
+                    tmp.data[i][j] *= c;
+            }
+        }
+        return tmp;
+    }
     matrix operator = (const matrix m){
         data = m.data;
         N_row = m.N_row;
@@ -135,5 +151,27 @@ public:
     auto set_data(int i, int j, T value){
         data[i][j] = value;
     }
+
+    // functions about data
+    T max() {
+        T max_val = data[0][0];
+        for (auto i = 0; i < N_row; ++i) {
+            for (auto j = 0; j < N_col; ++j) {
+                max_val = (data[i][j] < max_val) ? max_val : data[i][j];
+            }
+        }
+        return max_val;
+    }
+
+    T min() {
+        T min_val = data[0][0];
+        for (auto i = 0; i < N_row; ++i) {
+            for (auto j = 0; j < N_col; ++j) {
+                min_val = (data[i][j] > min_val) ? min_val : data[i][j];
+            }
+        }
+        return min_val;
+    }
+
     friend class lens_body;
 };
