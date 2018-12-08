@@ -40,7 +40,11 @@ HEADERS += \
     scalar_field_test.h \
     vector_field.h \
     vector_field_test.h \
-    lens.h
+    lens.h \
+    lens_test.h \
+    ior_field.h \
+    ior_field_test.h \
+    laser.h
 
 FORMS += \
         mainwindow.ui

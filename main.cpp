@@ -10,6 +10,11 @@
 #include "scalar_field_test.h"
 #include "vector_field.h"
 #include "vector_field_test.h"
+#include "lens.h"
+#include "lens_test.h"
+#include "ior_field.h"
+#include "ior_field_test.h"
+
 int main(int argc, char *argv[])
 {
     /*
@@ -18,5 +23,7 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
     */
-    test_gradiend2();
+
+    ior_field_test();
+
 }

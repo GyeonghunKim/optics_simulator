@@ -1,3 +1,4 @@
+// only convex lens only now!
 #pragma once
 #include "scalar_field.h"
 #include "point2d.h"
@@ -19,7 +20,7 @@ public:
         this->rad2 = rad2;
         this->R_lens = R_lens;
         this->n = n;
-        d1 = -1 * std::sqrt(rad1 * rad1 - R_lens * R_lens);
+        d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
         d2 = std::sqrt(rad2 * rad2 - R_lens * R_lens);
         d = this->d1 + this->d2;
         align.set_x(1);
@@ -34,7 +35,7 @@ public:
         this->rad2 = rad2;
         this->R_lens = R_lens;
         this->n = n;
-        d1 = -1 * std::sqrt(rad1 * rad1 - R_lens * R_lens);
+        d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
         d2 = std::sqrt(rad2 * rad2 - R_lens * R_lens);
         d = this->d1 + this->d2;
         align.set_x(1);
@@ -49,7 +50,7 @@ public:
         this->rad2 = rad2;
         this->R_lens = R_lens;
         this->n = n;
-        d1 = -1 * std::sqrt(rad1 * rad1 - R_lens * R_lens);
+        d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
         d2 = std::sqrt(rad2 * rad2 - R_lens * R_lens);
         d = this->d1 + this->d2;
         align.set_x(p.get_x());
@@ -57,9 +58,9 @@ public:
         align.normalize();
     }
 
-    // return theoretical focus(with co-axial approx.)
+    // return theoretical focus(with paraxial approx.)
     double get_thin_focus(){
-        return 1/((this->n - 1) * (1/this->rad1 - 1/this->rad2));
+        return 1.0/((double(n) - 1.0) * (1.0/rad1 - 1.0/rad2));
     }
 
     //print spec of lens
@@ -72,8 +73,21 @@ public:
         std::cout << "diameter : " << 2 * R_lens << std::endl;
         std::cout << "IOR: " << n << std::endl;
         std::cout << "thickness: " << d << "(" << d1 << " + " << d2 << " )" << std::endl;
+        std::cout << "paraxial focus: " << get_thin_focus() << std::endl;
     }
 
-    // friend double lens_function(double, double, lens);
+    friend double lens_function(double, double, lens);
 };
+double lens_function(double x, double y, lens l){
+    double r1 = std::sqrt((x - l.d1 * l.align.get_x() - l.center_x) * (x - l.d1 * l.align.get_x() - l.center_x)
+                          + (y - l.d1 * l.align.get_y() - l.center_y) * (y - l.d1 * l.align.get_y() - l.center_y));
+    double r2 = std::sqrt((x - l.d2 * l.align.get_x() - l.center_x) * (x - l.d2 * l.align.get_x() - l.center_x)
+                          + (y - l.d2 * l.align.get_y() - l.center_y) * (y - l.d2 * l.align.get_y() - l.center_y));
+    if (r1 < std::abs(l.rad1) && r2 < std::abs(l.rad2)){
+        return l.n;
+    }
+    else{
+        return 1;
+    }
+}
 

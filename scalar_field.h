@@ -1,6 +1,6 @@
 #pragma once
 #include "matrix.h"
-
+#include "point2d.h"
 template <typename T>
 class scalarField{
 protected:
@@ -167,6 +167,9 @@ public:
     }
     auto get_data(int i, int j){
         return data.get_data(i, j);
+    }
+    auto get_data(point2D<int> p){
+        return data.get_data(p.get_x(), p.get_y());
     }
     auto get_dx(){
         return dx;
