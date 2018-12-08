@@ -37,7 +37,8 @@ HEADERS += \
     matrix.h \
     matrix_test.h \
     scalar_field.h \
-    scalar_field_test.h
+    scalar_field_test.h \
+    vector_field.h
 
 FORMS += \
         mainwindow.ui
