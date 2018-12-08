@@ -179,4 +179,8 @@ public:
         data.print_only_value();
         std::cout << std::endl;
     }
+    void print_only_value(){
+        data.print_only_value();
+        std::cout << std::endl;
+    }
 };

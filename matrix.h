@@ -149,7 +149,6 @@ public:
     }
 
     // getters and setters
-    // I tried not to use.
     auto get_data(int i, int j){
         return data[i][j];
     }

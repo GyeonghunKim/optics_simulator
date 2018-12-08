@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "scalar_field.h"
 
 
@@ -46,8 +46,8 @@ public:
         this->dy = dy;
     }
     // initialize with two functions which initiaize each component of fields
-    vectorField(int N_row, int N_col, 
-                T fx(int, int), T fy(int, int), 
+    vectorField(int N_row, int N_col,
+                T fx(int, int), T fy(int, int),
                 double dx = 1, double dy = 1){
         scalarField<T> tmp_x(N_row, N_col, fx, dx, dy);
         scalarField<T> tmp_y(N_row, N_col, fy, dx, dy);
@@ -58,9 +58,9 @@ public:
         this->dx = dx;
         this->dy = dy;
     }
-    vectorField(int N_row, int N_col, 
-                T fx(double, double), double x1_min, double x1_max, double y1_min, double y1_max, 
-                T fy(double, double), double x2_min, double x2_max, double y2_min, double y2_max, 
+    vectorField(int N_row, int N_col,
+                T fx(double, double), double x1_min, double x1_max, double y1_min, double y1_max,
+                T fy(double, double), double x2_min, double x2_max, double y2_min, double y2_max,
                 double dx =1, double dy = 1){
         scalarField<T> tmp_x(N_row, N_col, fx, x1_min, x1_max, y1_min, y1_max, dx, dy);
         scalarField<T> tmp_y(N_row, N_col, fy, x2_min, x2_max, y2_min, y2_max, dx, dy);
@@ -73,15 +73,23 @@ public:
     }
     // print function
     void print(){
-        std::cout << "( " << std::endl;
+        std::cout << "Vector Field with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
+        std::cout << "dx = " << dx << ", " << "dy = " << dy << std::endl;
+        std::cout << "data: " <<std::endl;
+        std::cout << "x_components: " << std::endl;
         x_field.print();
-        std::cout << "," << std::endl;
+        std::cout << "y_components: " << std::endl;
         y_field.print();
-        std::cout << ")" << std::endl;
     }
-
-    friend auto scalarField<T>::gradient();
-    // getter 
+    
+    void print_type2(){
+        std::cout << "Vector Field with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
+        std::cout << "dx = " << dx << ", " << "dy = " << dy << std::endl;
+        std::cout << "data: " <<std::endl;
+        
+    }
+    
+    // getter
     auto get_x_field(){
         return x_field;
     }
@@ -97,37 +105,42 @@ public:
 };
 
 template <typename T>
-auto scalarField<T>::gradient() {
-    vectorField<T> tmp(this->N_row, this->N_col);
-    scalarField<T> grad_x(this->N_row, this->N_col);
-    for(auto i = 0; i < this->N_row; ++i){
-        for(auto j = 0; j < this->N_col; ++j){
+auto get_gradient(scalarField<T> s){
+    int N_row = s.get_N_row();
+    int N_col = s.get_N_col();
+    auto data = s.get_data();
+    double dx = s.get_dx();
+    double dy = s.get_dy();
+    matrix<T> grad_x_data(N_row, N_col);
+    for(auto i = 0; i < N_row; ++i){
+        for(auto j = 0; j < N_col; ++j){
             if(j == 0){
-                grad_x.data[i][j] = (this->data[i][j + 1] - this->data[i][j]) / dx;
+                grad_x_data.set_data(i, j, (data.get_data(i, j+1) - data.get_data(i, j)) / dx);
             }
-            else if(j == this->N_col - 1){
-                grad_x.data[i][j] = (this->data[i][j] - this->data[i][j - 1]) / dx;
+            else if(j == N_col - 1){
+                grad_x_data.set_data(i, j, (data.get_data(i, j) - data.get_data(i, j-1)) / dx);
             }
             else{
-                grad_x.data[i][j] = (this->data[i][j + 1]  - this->data[i][j - 1])/(2 * dx);
+                grad_x_data.set_data(i, j, (data.get_data(i, j+1)  - data.get_data(i, j-1))/(2 * dx));
             }
         }
     }
-    scalarField<T> grad_y(this->N_row, this->N_col);
-    for(auto i = 0; i < this->N_row; ++i){
-        for(auto j = 0; j < this->N_col; ++j){
+    scalarField<T> grad_x(grad_x_data);
+    matrix<T> grad_y_data(N_row, N_col);
+    for(auto i = 0; i < N_row; ++i){
+        for(auto j = 0; j < N_col; ++j){
             if(i == 0){
-                grad_y.data[i][j] = (this->data[i+1][j] - this->data[i][j]) /  dy;
+                grad_y_data.set_data(i, j, (data.get_data(i + 1, j) - data.get_data(i, j)) / dy);
             }
-            else if(i == this->N_row - 1){
-                grad_y.data[i][j] = (this->data[i][j] - this->data[i-1][j]) / dy;
+            else if(i == N_row - 1){
+                grad_y_data.set_data(i, j, (data.get_data(i, j) - data.get_data(i - 1, j)) / dy);
             }
             else{
-                grad_y.data[i][j] = (this->data[i+1][j] - this->data[i-1][j])/(2 * dy);
+                grad_y_data.set_data(i, j, (data.get_data(i + 1, j) - data.get_data(i - 1, j))/(2 * dy));
             }
         }
     }
-    tmp.x_field = grad_x;
-    tmp.y_field = grad_y;
+    scalarField<T> grad_y(grad_y_data);
+    vectorField<T> tmp(grad_x, grad_y);
     return tmp;
 }

@@ -8,7 +8,8 @@
 #include "matrix_test.h"
 #include "scalar_field.h"
 #include "scalar_field_test.h"
-
+#include "vector_field.h"
+#include "vector_field_test.h"
 int main(int argc, char *argv[])
 {
     /*
@@ -17,5 +18,5 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
     */
-    test_matrix1();
+    test_gradiend();
 }
