@@ -14,6 +14,8 @@
 #include "lens_test.h"
 #include "ior_field.h"
 #include "ior_field_test.h"
+#include "laser.h"
+#include "laser_test.h"
 
 int main(int argc, char *argv[])
 {
@@ -22,8 +24,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     return a.exec();
+
     */
 
-    ior_field_test();
-
+    laser_test();
 }

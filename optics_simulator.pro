@@ -44,7 +44,8 @@ HEADERS += \
     lens_test.h \
     ior_field.h \
     ior_field_test.h \
-    laser.h
+    laser.h \
+    laser_test.h
 
 FORMS += \
         mainwindow.ui

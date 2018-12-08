@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <iomanip>
-
+#include "point2d.h"
 
 template <typename T>
 class matrix{
@@ -154,6 +154,9 @@ public:
     }
     auto get_data(){
         return data;
+    }
+    auto get_data(point2D<int> p){
+        return data[p.get_x()][p.get_y()];
     }
     auto get_N_row(){
         return N_row;
