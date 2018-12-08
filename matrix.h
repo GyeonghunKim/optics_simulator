@@ -44,6 +44,20 @@ public:
     void print(){
         auto siz1 = data.size();
         auto siz2 = data[0].size();
+        std::cout << "Matrix with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
+        std::cout << "data: " <<std::endl;
+        for(auto i = 0; i < siz1; ++i){
+            for(auto j = 0; j < siz2; ++j){
+                std::cout << std::setw(5) << data[i][j] << "  ";
+            }
+            std::cout << "\n";
+        }
+        std::cout << std::endl;
+    }
+
+    void print_only_value(){
+        auto siz1 = data.size();
+        auto siz2 = data[0].size();
         for(auto i = 0; i < siz1; ++i){
             for(auto j = 0; j < siz2; ++j){
                 std::cout << std::setw(5) << data[i][j] << "  ";

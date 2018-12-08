@@ -33,12 +33,12 @@ public:
     }
     // print
     void print(){
-        std::cout << "(" << std::endl;
+        std::cout << "Point2D_series with length = " << length << std::endl;
+        std::cout << "data: " <<std::endl;
         for(auto i = 0; i < length; ++i){
             std::cout << i << ": ";
-            data[i].print();
+            data[i].print_only_value();
         }
-        std::cout << ")" << std::endl;
     }
     // getters
     auto get_last(){

@@ -35,8 +35,14 @@ public:
     }
     //prints functions
     void print(){
+        std::cout << "Point2D" << std::endl;
+        std::cout << "data: " <<std::endl;
         std::cout << "(" << x << ", " << y << ")" << std::endl;
     }
+    void print_only_value(){
+        std::cout << "(" << x << ", " << y << ")" << std::endl;
+    }
+
 
     // getters
     auto get_x(){

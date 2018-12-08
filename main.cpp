@@ -17,6 +17,5 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
     */
-    test_scalar_field6();
-
+    test_matrix1();
 }

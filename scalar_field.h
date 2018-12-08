@@ -159,12 +159,13 @@ public:
 
     }
 
+    // transpose the field
     void transpose(){
         auto tmp = data.transpose();
         this->data = tmp;
     }
 
-
+    // getters
     auto get_N_row(){
         return this->N_row;
     }
@@ -174,10 +175,13 @@ public:
     auto get_data(){
         return this->data;
     }
+
+    // print
     void print(){
-        data.print();
+        std::cout << "Scalar Field with N_rows = " << N_row << " and N_cols = " << N_col << std::endl;
+        std::cout << "dx = " << dx << ", " << "dy = " << dy << std::endl;
+        std::cout << "data: " <<std::endl;
+        data.print_only_value();
+        std::cout << std::endl;
     }
-    // auto get_value(point2D<int> p){
-    //     return data.get_data(p.get_x(), p.get_y());
-    // }
 };
