@@ -34,7 +34,7 @@ public:
     // print
     void print(){
         std::cout << "(" << std::endl;
-        for(auto i = 0; i < data.size(); ++i){
+        for(auto i = 0; i < length; ++i){
             std::cout << i << ": ";
             data[i].print();
         }

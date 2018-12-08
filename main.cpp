@@ -2,6 +2,9 @@
 #include <QApplication>
 #include "point2d.h"
 #include "point2d_test.h"
+#include "point2d_series.h"
+#include "point2d_series_test.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -12,5 +15,5 @@ int main(int argc, char *argv[])
 
     return a.exec();
     */
-    test_get_weight2();
+    test_point2d_series1();
 }

@@ -32,7 +32,8 @@ HEADERS += \
         mainwindow.h \
     point2d.h \
     point2d_test.h \
-    point2d_series.h
+    point2d_series.h \
+    point2d_series_test.h
 
 FORMS += \
         mainwindow.ui
