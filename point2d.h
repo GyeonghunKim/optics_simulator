@@ -33,6 +33,11 @@ public:
     friend point2D operator*(const T c, point2D & p){
         return p * c;
     }
+    //prints functions
+    void print(){
+        std::cout << "(" << x << ", " << y << ")" << std::endl;
+    }
+
     // getters
     auto get_x(){
         return x;
@@ -118,8 +123,6 @@ public:
         weights.push_back(w2);
         weights.push_back(w3);
         weights.push_back(w4);
-
-
 
         return weights;
     }

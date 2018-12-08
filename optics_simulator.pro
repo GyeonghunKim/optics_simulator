@@ -31,7 +31,8 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     point2d.h \
-    point2d_test.h
+    point2d_test.h \
+    point2d_series.h
 
 FORMS += \
         mainwindow.ui
