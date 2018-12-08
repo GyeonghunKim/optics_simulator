@@ -26,10 +26,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    point2d.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    point2d.h
 
 FORMS += \
         mainwindow.ui
