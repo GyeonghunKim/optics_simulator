@@ -71,7 +71,6 @@ public:
             auto new_point = loc.get_last() + vel_c * dir_c * dt;
             auto near = new_point.get_near();
             if((new_point.get_x() > x_min && new_point.get_y() > y_min) && (new_point.get_x() < x_max && new_point.get_y() < y_max)){
-                std::cout << "I'm in!!" <<std::endl;
                 loc.add_point(new_point);
             }
 
