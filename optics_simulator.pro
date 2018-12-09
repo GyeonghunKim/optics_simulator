@@ -26,7 +26,8 @@ CONFIG += c++14
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     ior_field.h \
     ior_field_test.h \
     laser.h \
-    laser_test.h
+    laser_test.h \
+    qcustomplot.h
 
 FORMS += \
         mainwindow.ui
