@@ -13,7 +13,7 @@
 #include "scalar_field.h"
 #include "vector_field.h"
 #include "ior_field.h"
-
+#include "laser.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   setGeometry(400, 250, 542, 390);
-  setupColorMapDemo(ui->customPlot);
+  drawIOR(ui->customPlot);
 
 
 }
@@ -31,7 +31,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setupColorMapDemo(QCustomPlot *customPlot)
+void MainWindow::drawIOR(QCustomPlot *customPlot)
 {
 
   // configure axis rect:
@@ -65,6 +65,25 @@ void MainWindow::setupColorMapDemo(QCustomPlot *customPlot)
          colorMap->data()->setCell(xIndex, yIndex, IOR[xIndex][yIndex]);
     }
   }
+
+  point2D<double> loc = {-2, 1.5};
+  point2D<double> dir = {1, -0.3};
+  laser laser1(loc, dir, field1, 0.01);
+  laser1.activation();
+  // laser1.get_loc().print();
+  auto laser_loc = laser1.get_loc();
+  auto path_length = laser_loc.get_length();
+  // std::cout << path_length << std::endl;
+  auto laser_data = laser_loc.get_data();
+  QVector<double> x(path_length), y(path_length); // initialize with entries 0..100
+  for (int i=0; i<path_length; ++i)
+  {
+    x[i] = laser_data[i].get_x();
+    y[i] = laser_data[i].get_y();
+  }
+  // create graph and assign data to it:
+  customPlot->addGraph();
+  customPlot->graph(0)->setData(x, y);
 
   // add a color scale:
   QCPColorScale *colorScale = new QCPColorScale(customPlot);

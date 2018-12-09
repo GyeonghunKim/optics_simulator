@@ -16,8 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-  void setupColorMapDemo(QCustomPlot *customPlot);
-
+  void drawIOR(QCustomPlot *customPlot);
 private:
     Ui::MainWindow *ui;
 };
