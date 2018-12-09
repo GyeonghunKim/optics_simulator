@@ -6,6 +6,7 @@
 class ior_field : public scalarField<double>{
 private:
     double x_min, x_max, y_min, y_max;
+    matrix<double> data;
 public:
     // default constructor
     ior_field() = default;
