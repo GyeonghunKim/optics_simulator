@@ -15,6 +15,7 @@ public:
         dx = (x_max - x_min) / (N_col - 1);
         dy = (y_max - y_min) / (N_row - 1);
         matrix<double> tmp(N_row, N_col);
+
         for(auto i = 0; i < N_row; ++i){
             auto x = x_min + i * dx;
             for(auto j = 0; j < N_col; ++j){
@@ -42,6 +43,11 @@ public:
         y_min = m.y_min;
         y_max = m.y_max;
         return *this;
+    }
+
+    // print functions
+    void print(){
+        data.print();
     }
 
     // getter

@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
   ui->setupUi(this);
   setGeometry(400, 250, 542, 390);
-  setupColorMapDemo(ui->customPlot);
+  drawIOR(ui->customPlot);
 
 
 }
@@ -31,7 +31,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::setupColorMapDemo(QCustomPlot *customPlot)
+void MainWindow::drawIOR(QCustomPlot *customPlot)
 {
 
   // configure axis rect:
@@ -88,4 +88,7 @@ void MainWindow::setupColorMapDemo(QCustomPlot *customPlot)
 
   // rescale the key (x) and value (y) axes so the whole color map is visible:
   customPlot->rescaleAxes();
+}
+void drawLaser(QCustomPlot *customPlot){
+    
 }

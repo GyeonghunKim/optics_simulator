@@ -21,8 +21,8 @@ public:
         this->R_lens = R_lens;
         this->n = n;
         d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
-        d2 = std::sqrt(rad2 * rad2 - R_lens * R_lens);
-        d = this->d1 + this->d2;
+        d2 = -1 * std::sqrt(rad2 * rad2 - R_lens * R_lens);
+        d = this->d1 - this->d2;
         align.set_x(1);
         align.set_y(0);
         align.normalize();
@@ -36,8 +36,8 @@ public:
         this->R_lens = R_lens;
         this->n = n;
         d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
-        d2 = std::sqrt(rad2 * rad2 - R_lens * R_lens);
-        d = this->d1 + this->d2;
+        d2 = -1 * std::sqrt(rad2 * rad2 - R_lens * R_lens);
+        d = this->d1 - this->d2;
         align.set_x(1);
         align.set_y(0);
         align.normalize();
@@ -51,8 +51,8 @@ public:
         this->R_lens = R_lens;
         this->n = n;
         d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
-        d2 = std::sqrt(rad2 * rad2 - R_lens * R_lens);
-        d = this->d1 + this->d2;
+        d2 = -1 * std::sqrt(rad2 * rad2 - R_lens * R_lens);
+        d = this->d1 - this->d2;
         align.set_x(p.get_x());
         align.set_y(p.get_y());
         align.normalize();
