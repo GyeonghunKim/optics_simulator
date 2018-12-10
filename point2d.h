@@ -33,6 +33,9 @@ public:
     friend point2D operator*(const T c, point2D & p){
         return p * c;
     }
+    friend T operator*(point2D & p1, point2D & p2){
+        return p1.get_x() * p2.get_x() + p1.get_y() * p2.get_y();
+    }
     //prints functions
     void print(){
         std::cout << "Point2D" << std::endl;
@@ -71,20 +74,45 @@ public:
         x /= norm2;
         y /= norm2;
     }
+    auto rotate_halfpi(){
+        point2D<double> tmp = {-1 * y, x};
+        return tmp;
+    }
+    auto rotate(double theta){
+        auto c = std::cos(theta);
+        auto s = std::sin(theta);
+        point2D<double> tmp = {c * x - s * y, s * x + c * y};
+        return tmp;
+    }
+    double get_theta(point2D<T> p){
+        auto rot_this = this->rotate_halfpi();
+        auto c1 = this->x * p.get_x() + this->y * p.get_y();
+        auto c2 = rot_this.get_x() * p.get_x() + rot_this.get_y() * p.get_y();
+        if(c1 > 0){
+            if(c2 > 0) return std::acos(c1);
+            else return -1 * std::acos(c1);
+        }
+        else{
+            if(c2 > 0) return std::acos(c1);
+            else return -1 * std::acos(c1);
+        }
+    }
 
     // functions for interpolation
     // return near integer points in order below.
     // 0 1
     // 3 2
-    auto get_near(){    // return type is std::vector<point2D<int>> with size 4
+    auto get_near(double x_min, double y_min, double dx, double dy){    // return type is std::vector<point2D<int>> with size 4
         std::vector<point2D<int>> near_points;
-        point2D<int> tmp1(floor(x), floor(y));
+        auto i = floor((x - x_min) / dx);
+        auto j = floor((y - y_min) / dx);
+        point2D<int> tmp1(i, j);
         near_points.push_back(tmp1);
-        point2D<int> tmp2(floor(x) + 1, floor(y));
+        point2D<int> tmp2(i + 1, j);
          near_points.push_back(tmp2);
-        point2D<int> tmp3(floor(x) + 1, floor(y) + 1);
+        point2D<int> tmp3(i + 1, j + 1);
          near_points.push_back(tmp3);
-        point2D<int> tmp4(floor(x), floor(y) + 1);
+        point2D<int> tmp4(i, j + 1);
          near_points.push_back(tmp4);
         return near_points;
     }

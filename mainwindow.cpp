@@ -42,8 +42,8 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
 
   // set up the QCPColorMap:
   QCPColorMap *colorMap = new QCPColorMap(customPlot->xAxis, customPlot->yAxis);
-  int nx = 1000;
-  int ny = 1000;
+  int nx = 5000;
+  int ny = 5000;
   colorMap->data()->setSize(nx, ny); // we want the color map to have nx * ny data points
   double x_min = -4;
   double x_max = 4;
@@ -52,7 +52,7 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
   colorMap->data()->setRange(QCPRange(x_min, x_max), QCPRange(y_min, y_max)); // and span the coordinate range -4..4 in both key (x) and value (y) dimensions
   // now we assign some data, by accessing the QCPColorMapData instance of the color map:
 
-  lens l1(0, 0, 3, -3, 2, 1.5);
+  lens l1(0, 0, 10, -10, 4, 1.5);
   l1.print_spec();
   ior_field field1(nx, ny, x_min, x_max, y_min, y_max, l1);
   // field1.print();
@@ -66,8 +66,8 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
     }
   }
 
-  point2D<double> loc = {-2, 1.5};
-  point2D<double> dir = {1, -1};
+  point2D<double> loc = {-2, -2};
+  point2D<double> dir = {1, 0};
   laser laser1(loc, dir, field1, 0.01);
   laser1.activation();
   // laser1.get_loc().print();
@@ -90,7 +90,7 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
   customPlot->plotLayout()->addElement(0, 1, colorScale); // add it to the right of the main axis rect
   colorScale->setType(QCPAxis::atRight); // scale shall be vertical bar with tick/axis labels right (actually atRight is already the default)
   colorMap->setColorScale(colorScale); // associate the color map with the color scale
-  colorScale->axis()->setLabel("Magnetic Field Strength");
+  colorScale->axis()->setLabel("Index of Reflectence");
 
   // set the color gradient of the color map to one of the presets:
   colorMap->setGradient(QCPColorGradient::gpPolar);

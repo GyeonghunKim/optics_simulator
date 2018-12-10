@@ -147,6 +147,7 @@ auto get_gradient(scalarField<T> s){
         }
     }
     scalarField<T> grad_y(grad_y_data, dx, dy);
-    vectorField<T> tmp(grad_x, grad_y);
+    // my coordinate system is transposed..
+    vectorField<T> tmp(grad_y, grad_x);
     return tmp;
 }

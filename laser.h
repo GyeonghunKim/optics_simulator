@@ -49,11 +49,13 @@ public:
 
     // get IOR using interpolation
     auto get_IOR(point2D<double> p){
-        auto nears = p.get_near();
+        auto dx = IOR_field.get_dx();
+        auto dy = IOR_field.get_dy();
+        auto nears = p.get_near(x_min, y_min, dx, dy);
         auto weights = p.get_weight();
         auto n = 0.0;
         for(auto i = 0; i< 4; ++i){
-            std::cout << table.get_data(nears[i]) << std::endl;
+            // std::cout << table.get_data(nears[i]) << std::endl;
             n += weights[i] * table.get_data(nears[i]);
         }
         return n;
@@ -72,31 +74,84 @@ public:
         auto grad_ior_field = get_gradient(s_field_ior);
         // grad_ior_field.print();
         auto dx = IOR_field.get_dx();
-        std::cout << "dx = " << dx << std::endl;
+        // std::cout << "dx = " << dx << std::endl;
         auto dy = IOR_field.get_dy();
         int k = 1;
-        int kk = 1;
         while(true){
+            // std::cout << k << std::endl;
+            if(++k > 400){
+                break;
+            }
             // std::cout << "i = " << i++ << std::endl;
             auto vel_c = vel.back();
             auto dir_c = dir.get_last();
+            auto loc_c = loc.get_last();
 
-            auto i = (loc.get_last().get_x() - x_min)/dx;
-            auto j = (loc.get_last().get_y() - y_min)/dy;
+            auto near = loc_c.get_near(x_min, y_min, dx, dy);
+            auto weights = loc_c.get_weight();
 
-            auto tp_x = grad_ior_field.get_x_field().get_data(i, j);
-            auto tp_y = grad_ior_field.get_y_field().get_data(i, j);
+            auto new_point = loc_c + vel_c * dir_c * dt;
 
-            auto new_point = loc.get_last() + vel_c * dir_c * dt;
 
-            auto near = new_point.get_near();
+            double tp_x = 0;
+            double tp_y = 0;
+            tp_x += grad_ior_field.get_x_field().get_data(near[0].get_x(), near[0].get_y()) * weights[0];
+            tp_x += grad_ior_field.get_x_field().get_data(near[1].get_x(), near[1].get_y()) * weights[1];
+            tp_x += grad_ior_field.get_x_field().get_data(near[2].get_x(), near[2].get_y()) * weights[2];
+            tp_x += grad_ior_field.get_x_field().get_data(near[3].get_x(), near[3].get_y()) * weights[3];
+
+            tp_y += grad_ior_field.get_y_field().get_data(near[0].get_x(), near[0].get_y()) * weights[0];
+            tp_y += grad_ior_field.get_y_field().get_data(near[1].get_x(), near[1].get_y()) * weights[1];
+            tp_y += grad_ior_field.get_y_field().get_data(near[2].get_x(), near[2].get_y()) * weights[2];
+            tp_y += grad_ior_field.get_y_field().get_data(near[3].get_x(), near[3].get_y()) * weights[3];
+            point2D<double> grad_c = {tp_x, tp_y};
+            grad_c.normalize();
+            auto tang_c = grad_c.rotate_halfpi();
+
 
             if(tp_x == 0 && tp_y == 0){
                 dir.add_point(dir_c);
             }
             else{
-                dir_c.set_y(dir_c.get_y() + 0.3);
-                dir.add_point(dir_c);
+                // std::cout << "in" << std::endl;
+                // dir_c.set_y(dir_c.get_y() + 0.3);
+                dir_c.normalize();
+
+                auto thetai = grad_c.get_theta(dir_c);
+                auto cos_thetai = std::cos(thetai);
+                auto sin_thetaf = get_IOR(loc_c) * std::sqrt(1 - cos_thetai * cos_thetai) / get_IOR(new_point);
+                std::cout << sin_thetaf << std::endl;
+                double thetaf = 0;
+                if(thetai > 0){
+                    thetaf = std::abs(std::asin(sin_thetaf));
+                }
+                else{
+                    thetaf = -1 * std::abs(std::asin(sin_thetaf));
+                }
+
+                // std::cout << thetaf << std::endl;
+                if(std::abs(thetai) > std::atan(1) * 2){
+                    if(thetaf > 0){
+                        auto new_dir = grad_c.rotate(thetaf + std::atan(1) * 2);
+                        dir.add_point(new_dir);
+                    }
+                    else{
+                        auto new_dir = grad_c.rotate(thetaf - std::atan(1) * 2);
+                        dir.add_point(new_dir);
+                    }
+                }
+                else{
+                    auto new_dir = grad_c.rotate(thetaf);
+                    dir.add_point(new_dir);
+                }
+
+                // std::cout << "nears" << std::endl;
+                // near[0].print();near[1].print();near[2].print();near[3].print();
+                // std::cout << weights[0] << "," <<  weights[1] << "," <<  weights[2] << "," << weights[3] << std::endl;
+                // std::cout << "grdient, " << cos_thetai << "\t" << sin_thetaf << std::endl;
+                // grad_c.print();
+                // tang_c.print();
+
             }
 
             if((new_point.get_x() > x_min && new_point.get_y() > y_min) && (new_point.get_x() < x_max && new_point.get_y() < y_max)){
