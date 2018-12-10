@@ -22,6 +22,8 @@ private:
     matrix<double> table;
     // velocity at n = 1
     double c = 1;
+    // ior_field table
+    ior_field IOR_field;
 public:
     // default constructor
     laser() = default;
@@ -39,7 +41,10 @@ public:
         this->y_max = opt.get_y_max();
         this->dt = dt;
         this->table = opt.get_data();
-        // table.print();
+        this->IOR_field = opt;
+        std::cout << "This is from constructor" << std::endl;
+        std::cout << opt.get_dx() << std::endl;
+
     }
 
     // get IOR using interpolation
@@ -63,17 +68,40 @@ public:
 
     void activation(){
         int i = 0;
-
+        auto s_field_ior = scalarField<double>(IOR_field.get_data(), IOR_field.get_dx(), IOR_field.get_dy());
+        auto grad_ior_field = get_gradient(s_field_ior);
+        // grad_ior_field.print();
+        auto dx = IOR_field.get_dx();
+        std::cout << "dx = " << dx << std::endl;
+        auto dy = IOR_field.get_dy();
+        int k = 1;
+        int kk = 1;
         while(true){
             // std::cout << "i = " << i++ << std::endl;
             auto vel_c = vel.back();
             auto dir_c = dir.get_last();
+
+            auto i = (loc.get_last().get_x() - x_min)/dx;
+            auto j = (loc.get_last().get_y() - y_min)/dy;
+
+            auto tp_x = grad_ior_field.get_x_field().get_data(i, j);
+            auto tp_y = grad_ior_field.get_y_field().get_data(i, j);
+
             auto new_point = loc.get_last() + vel_c * dir_c * dt;
+
             auto near = new_point.get_near();
+
+            if(tp_x == 0 && tp_y == 0){
+                dir.add_point(dir_c);
+            }
+            else{
+                dir_c.set_y(dir_c.get_y() + 0.3);
+                dir.add_point(dir_c);
+            }
+
             if((new_point.get_x() > x_min && new_point.get_y() > y_min) && (new_point.get_x() < x_max && new_point.get_y() < y_max)){
                 loc.add_point(new_point);
             }
-
             else{break;}
         }
     }

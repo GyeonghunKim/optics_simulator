@@ -11,6 +11,7 @@ protected:
     int N_row, N_col;
     double dx = 1;
     double dy = 1;
+    double x_min, x_max, y_min, y_max;
 public:
     // default constructor
     scalarField() = default;
@@ -72,6 +73,10 @@ public:
                 double x_min, double x_max, double y_min, double y_max){
         this->N_col = N_col;
         this->N_row = N_row;
+        this->x_min = x_min;
+        this->y_min = y_min;
+        this->x_max = x_max;
+        this->y_max = y_max;
         dx = (x_max - x_min) / (N_col - 1);
         dy = (y_max - y_min) / (N_row - 1);
         std::vector<std::vector<T>> tmp(N_row, std::vector<T> (N_col, 0));
@@ -90,6 +95,10 @@ public:
     scalarField(int N_row, int N_col, double x_min, double y_min , T f(double, double), double dx = 1, double dy = 1){
         this->N_col = N_col;
         this->N_row = N_row;
+        this->x_min = x_min;
+        this->y_min = y_min;
+        this->x_max = x_max;
+        this->y_max = y_max;
         std::vector<std::vector<T>> tmp(N_row, std::vector<T> (N_col, 0));
         for(auto i = 0; i < N_row; ++i){
             auto x = x_min + i * dx;
@@ -145,6 +154,10 @@ public:
         N_col = m.N_col;
         dx = m.dx;
         dy = m.dy;
+        x_min = m.x_min;
+        y_min = m.y_min;
+        x_max = m.x_max;
+        y_max = m.y_max;
         return *this;
 
     }
@@ -176,6 +189,16 @@ public:
     }
     auto get_dy(){
         return dy;
+    }
+
+    // value 2 index
+    auto x2i(T x){
+        auto i = std::floor(x - x_min) / dx;
+        return i;
+    }
+    auto y2j(T y){
+        auto j = std::floor(y - y_min) / dy;
+        return j;
     }
     // print
     void print(){

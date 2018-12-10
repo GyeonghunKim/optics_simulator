@@ -67,7 +67,7 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
   }
 
   point2D<double> loc = {-2, 1.5};
-  point2D<double> dir = {1, -0.3};
+  point2D<double> dir = {1, -1};
   laser laser1(loc, dir, field1, 0.01);
   laser1.activation();
   // laser1.get_loc().print();

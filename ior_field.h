@@ -34,22 +34,25 @@ public:
         this->data = tmp;
 }
 
-    ior_field operator = (const ior_field m){
-        data = m.data;
-        N_row = m.N_row;
-        N_col = m.N_col;
-        x_min = m.x_min;
-        x_max = m.x_max;
-        y_min = m.y_min;
-        y_max = m.y_max;
-        return *this;
-    }
 
     // print functions
     void print(){
         data.print();
     }
+    // operator = overloading
+    ior_field operator = (const ior_field m){
+        data = m.data;
+        N_row = m.N_row;
+        N_col = m.N_col;
+        dx = m.dx;
+        dy = m.dy;
+        x_min = m.x_min;
+        y_min = m.y_min;
+        x_max = m.x_max;
+        y_max = m.y_max;
+        return *this;
 
+    }
     // getter
     auto get_data(){
         return data;
