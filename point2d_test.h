@@ -17,3 +17,10 @@ auto test_get_weight2(){
     std::cout << c[0] << "\t" << c[1] << "\t" << c[2] << "\t" << c[3] << std::endl;
 }
 
+auto get_theta_test(){
+    point2D<double> a = {3, 4};
+    point2D<double> b = {1, 1};
+    auto t1 = a.get_theta(b);
+    auto t2 = b.get_theta(a);
+    std::cout << t1 << "\t" << t2 << std::endl;
+}

@@ -85,17 +85,28 @@ public:
         return tmp;
     }
     double get_theta(point2D<T> p){
+        this->print();
+        // std::cout << "[" << this->x << ", " << this->y << "]" << std::endl;
+
         auto rot_this = this->rotate_halfpi();
-        auto c1 = this->x * p.get_x() + this->y * p.get_y();
-        auto c2 = rot_this.get_x() * p.get_x() + rot_this.get_y() * p.get_y();
+        rot_this.print();
+        // std::cout << "[" << rot_this.get_x() << ", " << rot_this.get_y() << "]" << std::endl;
+
+        auto c1 = (this->x * p.get_x() + this->y * p.get_y()) / (this->norm2() * p.norm2());
+        auto c2 = (rot_this.get_x() * p.get_x() + rot_this.get_y() * p.get_y()) / (rot_this.norm2() * p.norm2());
+        std::cout << "c1 and c2" << std::endl;
+        std::cout << c1 << "\t" << c2 << std::endl;
+
         if(c1 > 0){
             if(c2 > 0) return std::acos(c1);
             else return -1 * std::acos(c1);
         }
+
         else{
             if(c2 > 0) return std::acos(c1);
             else return -1 * std::acos(c1);
         }
+
     }
 
     // functions for interpolation
