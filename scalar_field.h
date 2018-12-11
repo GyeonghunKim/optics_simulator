@@ -148,7 +148,7 @@ public:
         return tmpp;
     }
 
-    scalarField<T> operator = (const scalarField<T> m){
+    scalarField<T> operator = (const scalarField<T> &m){
         data = m.data;
         N_row = m.N_row;
         N_col = m.N_col;
@@ -212,4 +212,5 @@ public:
         data.print_only_value();
         std::cout << std::endl;
     }
+
 };

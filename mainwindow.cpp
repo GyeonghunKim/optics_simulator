@@ -22,8 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->setupUi(this);
   setGeometry(400, 250, 542, 390);
   drawIOR(ui->customPlot);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -45,14 +43,14 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
   int nx = 5000;
   int ny = 5000;
   colorMap->data()->setSize(nx, ny); // we want the color map to have nx * ny data points
-  double x_min = -4;
-  double x_max = 4;
-  double y_min = -4;
-  double y_max = 4;
+  double x_min = -8;
+  double x_max = 8;
+  double y_min = -8;
+  double y_max = 8;
   colorMap->data()->setRange(QCPRange(x_min, x_max), QCPRange(y_min, y_max)); // and span the coordinate range -4..4 in both key (x) and value (y) dimensions
   // now we assign some data, by accessing the QCPColorMapData instance of the color map:
 
-  lens l1(0, 0, 10, -10, 4, 1.5);
+  lens l1(0, 0, 5, -5, 4, 1.5);
   l1.print_spec();
   ior_field field1(nx, ny, x_min, x_max, y_min, y_max, l1);
   // field1.print();
@@ -66,7 +64,7 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
     }
   }
 
-  point2D<double> loc = {-2, -2};
+  point2D<double> loc = {-5, 02.3};
   point2D<double> dir = {1, 0};
   laser laser1(loc, dir, field1, 0.01);
   laser1.activation();
@@ -84,7 +82,7 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
   // create graph and assign data to it:
   customPlot->addGraph();
   customPlot->graph(0)->setData(x, y);
-
+  customPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, Qt::red, Qt::white, 7));
   // add a color scale:
   QCPColorScale *colorScale = new QCPColorScale(customPlot);
   customPlot->plotLayout()->addElement(0, 1, colorScale); // add it to the right of the main axis rect

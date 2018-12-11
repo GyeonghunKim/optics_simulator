@@ -43,8 +43,7 @@ public:
         this->table = opt.get_data();
         this->IOR_field = opt;
         std::cout << "This is from constructor" << std::endl;
-        std::cout << opt.get_dx() << std::endl;
-
+        std::cout << opt.get_x_min() << "\t" << opt.get_y_min() << std::endl;
     }
 
     // get IOR using interpolation
@@ -60,12 +59,15 @@ public:
         }
         return n;
     }
+    auto get_IOR2(point2D<double> p){
+        // std::cout << IOR_field.get_x_min() << "\t" << IOR_field.get_x_max() << std::endl;
+        return IOR_field.get_value_bilinear(p.get_x(), p.get_y());
+    }
 
     // get velocity using definition of IOR v = c / n
     auto get_vel(point2D<double> p){
         return c / get_IOR(p);
     }
-
 
 
     void activation(){
@@ -78,8 +80,9 @@ public:
         auto dy = IOR_field.get_dy();
         int k = 1;
         while(true){
+
             // std::cout << k << std::endl;
-            if(++k > 400){
+            if(++k > 2000){
                 break;
             }
             // std::cout << "i = " << i++ << std::endl;
@@ -87,6 +90,10 @@ public:
             auto dir_c = dir.get_last();
             auto loc_c = loc.get_last();
 
+
+            if(!((loc_c.get_x() > x_min * 1.1 && loc_c.get_y() > y_min * 1.1) && (loc_c.get_x() < x_max * 0.9 && loc_c.get_y() < y_max * 0.9))){
+                break;
+            }
             auto near = loc_c.get_near(x_min, y_min, dx, dy);
             auto weights = loc_c.get_weight();
 
@@ -119,8 +126,8 @@ public:
 
                 auto thetai = grad_c.get_theta(dir_c);
                 auto cos_thetai = std::cos(thetai);
-                auto sin_thetaf = get_IOR(loc_c) * std::sqrt(1 - cos_thetai * cos_thetai) / get_IOR(new_point);
-                std::cout << sin_thetaf << std::endl;
+                auto sin_thetaf = get_IOR2(loc_c) * std::sqrt(1 - cos_thetai * cos_thetai) / get_IOR2(new_point);
+                // std::cout << sin_thetaf << std::endl;
                 double thetaf = 0;
                 if(thetai > 0){
                     thetaf = std::abs(std::asin(sin_thetaf));
@@ -128,15 +135,24 @@ public:
                 else{
                     thetaf = -1 * std::abs(std::asin(sin_thetaf));
                 }
-
-                // std::cout << thetaf << std::endl;
+                if (std::isnan(thetaf)){
+                    std::cout << "program stopped because thetaf is nan" << std::endl;
+                    std::cout << "IOR loc_c is: " << get_IOR2(loc_c) << std::endl;
+                    std::cout << "IOR new_point is: " << get_IOR2(new_point) << std::endl;
+                    break;
+                }
+                std::cout << "loc is : " << std::endl;
+                loc_c.print_only_value();
+                std::cout << "grad is : " << std::endl;
+                grad_c.print_only_value();
+                std::cout << "thetaf is: " << thetaf << std::endl;
                 if(std::abs(thetai) > std::atan(1) * 2){
                     if(thetaf > 0){
-                        auto new_dir = grad_c.rotate(thetaf + std::atan(1) * 2);
+                        auto new_dir = grad_c.rotate(4 * std::atan(1) - thetaf);
                         dir.add_point(new_dir);
                     }
                     else{
-                        auto new_dir = grad_c.rotate(thetaf - std::atan(1) * 2);
+                        auto new_dir = grad_c.rotate(thetaf - 4 * std::atan(1));
                         dir.add_point(new_dir);
                     }
                 }
@@ -154,7 +170,7 @@ public:
 
             }
 
-            if((new_point.get_x() > x_min && new_point.get_y() > y_min) && (new_point.get_x() < x_max && new_point.get_y() < y_max)){
+            if((new_point.get_x() > x_min * 1.1 && new_point.get_y() > y_min * 1.1) && (new_point.get_x() < x_max * 0.9 && new_point.get_y() < y_max * 0.9)){
                 loc.add_point(new_point);
             }
             else{break;}

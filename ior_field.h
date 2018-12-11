@@ -33,14 +33,7 @@ public:
         this->dy = dy;
         this->data = tmp;
 }
-
-
-    // print functions
-    void print(){
-        data.print();
-    }
-    // operator = overloading
-    ior_field operator = (const ior_field m){
+    ior_field(const ior_field &m){
         data = m.data;
         N_row = m.N_row;
         N_col = m.N_col;
@@ -50,8 +43,15 @@ public:
         y_min = m.y_min;
         x_max = m.x_max;
         y_max = m.y_max;
-        return *this;
+        std::cout << "in ior_field";
+        std::cout << x_min << "\t" << x_max << "\t" << y_min << "\t" << y_max <<std::endl;
+    }
 
+
+
+    // print functions
+    void print(){
+        data.print();
     }
     // getter
     auto get_data(){
@@ -87,5 +87,24 @@ public:
     auto get_y_max(){
         return y_max;
     }
+
+    double get_value_bilinear(double x, double y){
+        std::cout << "this is from get_value_bilinear" << std::endl;
+        std::cout << x_min << "\t" << x_max << std::endl;
+
+        auto i = std::floor((x - x_min) / dx);
+        auto i_float = (x - x_min) / dx;
+        auto j = std::floor((y - y_min) / dy);
+        auto j_float = (y - y_min) / dy;
+        auto a00 = data.get_data(i, j);
+        auto a10 = data.get_data(i + 1, j) - data.get_data(i, j);
+        auto a01 = data.get_data(i, j + 1) - data.get_data(i, j);
+        auto a11 = data.get_data(i + 1, j + 1) + data.get_data(i, j) - data.get_data(i + 1, j) - data.get_data(i, j + 1);
+        auto ix = i_float - i;
+        auto jy = j_float - j;
+        return a00 + a10 * ix + a01 * jy + a11 * ix * jy;
+    }
+
+
 };
 
