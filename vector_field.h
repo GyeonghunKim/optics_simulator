@@ -94,6 +94,12 @@ public:
         }
     }
 
+    void print_matlab(){
+        std::cout << "x_components: " << std::endl;
+        x_field.print_matlab();
+        std::cout << "y_components: " << std::endl;
+        y_field.print_matlab();
+    }
 
     // getter
     auto get_x_field(){
@@ -108,6 +114,7 @@ public:
     auto get_N_col(){
         return N_col;
     }
+
 };
 
 template <typename T>

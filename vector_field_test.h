@@ -13,12 +13,18 @@ auto test_gradiend(){
 }
 
 double init_func6(double x, double y){
-    return 2 * (x - 1) * (x - 1) + y;
+    if(x * x + y * y < 10){
+        return 1.5;
+    }
+    else{
+        return 1;
+    }
 }
 
 auto test_gradiend2(){
-    scalarField<double> s1(10, 10, init_func6, 0, 2, 0, 2);
+    scalarField<double> s1(100, 100, init_func6, -20, 20, -20, 20);
     s1.print();
     auto v = get_gradient(s1);
-    v.print_type2();
+    v.print_matlab();
 }
+

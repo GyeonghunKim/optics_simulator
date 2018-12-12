@@ -47,6 +47,18 @@ public:
         std::cout << x_min << "\t" << x_max << "\t" << y_min << "\t" << y_max <<std::endl;
     }
 
+    ior_field(scalarField m){
+        data = m.get_data();
+        N_row = m.get_N_row();
+        N_col = m.get_N_col();
+        dx = m.get_dx();
+        dy = m.get_dy();
+        x_min = m.get_x_min();
+        y_min = m.get_y_min();
+        x_max = m.get_x_max();
+        y_max = m.get_y_max();
+
+    }
 
 
     // print functions

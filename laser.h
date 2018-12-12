@@ -73,53 +73,62 @@ public:
     void activation(){
         int i = 0;
         auto s_field_ior = scalarField<double>(IOR_field.get_data(), IOR_field.get_dx(), IOR_field.get_dy());
-        auto grad_ior_field = get_gradient(s_field_ior);
-        // grad_ior_field.print();
+        s_field_ior.box_smoothing();
+        auto grad_ior_field = get_gradient<double>(s_field_ior);
+
+        // grad_ior_field.print_matlab();
         auto dx = IOR_field.get_dx();
         // std::cout << "dx = " << dx << std::endl;
         auto dy = IOR_field.get_dy();
-        int k = 1;
+        // int k = 1;
         while(true){
 
             // std::cout << k << std::endl;
+            /*
             if(++k > 2000){
                 break;
             }
+            */
             // std::cout << "i = " << i++ << std::endl;
+
             auto vel_c = vel.back();
             auto dir_c = dir.get_last();
             auto loc_c = loc.get_last();
 
-
+            /*
             if(!((loc_c.get_x() > x_min * 1.1 && loc_c.get_y() > y_min * 1.1) && (loc_c.get_x() < x_max * 0.9 && loc_c.get_y() < y_max * 0.9))){
                 break;
             }
+            */
+
             auto near = loc_c.get_near(x_min, y_min, dx, dy);
             auto weights = loc_c.get_weight();
-
             auto new_point = loc_c + vel_c * dir_c * dt;
 
 
             double tp_x = 0;
             double tp_y = 0;
-            tp_x += grad_ior_field.get_x_field().get_data(near[0].get_x(), near[0].get_y()) * weights[0];
-            tp_x += grad_ior_field.get_x_field().get_data(near[1].get_x(), near[1].get_y()) * weights[1];
-            tp_x += grad_ior_field.get_x_field().get_data(near[2].get_x(), near[2].get_y()) * weights[2];
-            tp_x += grad_ior_field.get_x_field().get_data(near[3].get_x(), near[3].get_y()) * weights[3];
+            auto grad_ior_x = grad_ior_field.get_x_field();
+            auto grad_ior_y = grad_ior_field.get_y_field();
+            tp_x += grad_ior_x.get_data(near[0].get_x(), near[0].get_y()) * weights[0];
+            tp_x += grad_ior_x.get_data(near[1].get_x(), near[1].get_y()) * weights[1];
+            tp_x += grad_ior_x.get_data(near[2].get_x(), near[2].get_y()) * weights[2];
+            tp_x += grad_ior_x.get_data(near[3].get_x(), near[3].get_y()) * weights[3];
 
-            tp_y += grad_ior_field.get_y_field().get_data(near[0].get_x(), near[0].get_y()) * weights[0];
-            tp_y += grad_ior_field.get_y_field().get_data(near[1].get_x(), near[1].get_y()) * weights[1];
-            tp_y += grad_ior_field.get_y_field().get_data(near[2].get_x(), near[2].get_y()) * weights[2];
-            tp_y += grad_ior_field.get_y_field().get_data(near[3].get_x(), near[3].get_y()) * weights[3];
-            point2D<double> grad_c = {tp_x, tp_y};
-            grad_c.normalize();
-            auto tang_c = grad_c.rotate_halfpi();
-
+            tp_y += grad_ior_y.get_data(near[0].get_x(), near[0].get_y()) * weights[0];
+            tp_y += grad_ior_y.get_data(near[1].get_x(), near[1].get_y()) * weights[1];
+            tp_y += grad_ior_y.get_data(near[2].get_x(), near[2].get_y()) * weights[2];
+            tp_y += grad_ior_y.get_data(near[3].get_x(), near[3].get_y()) * weights[3];
 
             if(tp_x == 0 && tp_y == 0){
                 dir.add_point(dir_c);
             }
             else{
+
+                point2D<double> grad_c = {tp_x, tp_y};
+                grad_c.normalize();
+                auto tang_c = grad_c.rotate_halfpi();
+
                 // std::cout << "in" << std::endl;
                 // dir_c.set_y(dir_c.get_y() + 0.3);
                 dir_c.normalize();
@@ -148,15 +157,18 @@ public:
                 std::cout << "thetaf is: " << thetaf << std::endl;
                 if(std::abs(thetai) > std::atan(1) * 2){
                     if(thetaf > 0){
+                        std::cout << "****************1********************" << std::endl;
                         auto new_dir = grad_c.rotate(4 * std::atan(1) - thetaf);
                         dir.add_point(new_dir);
                     }
                     else{
-                        auto new_dir = grad_c.rotate(thetaf - 4 * std::atan(1));
+                        std::cout << "****************2********************" << std::endl;
+                        auto new_dir = grad_c.rotate(4 * std::atan(1) - thetaf);
                         dir.add_point(new_dir);
                     }
                 }
                 else{
+                     std::cout << "****************3********************" << std::endl;
                     auto new_dir = grad_c.rotate(thetaf);
                     dir.add_point(new_dir);
                 }

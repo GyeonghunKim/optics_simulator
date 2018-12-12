@@ -65,7 +65,18 @@ public:
             std::cout << "\n";
         }
     }
-
+    void print_matlab(){
+        auto siz1 = data.size();
+        auto siz2 = data[0].size();
+        std::cout << "[";
+        for(auto i = 0; i < siz1; ++i){
+            for(auto j = 0; j < siz2; ++j){
+                std::cout << data[i][j] << " ";
+            }
+            std::cout << ";\n";
+        }
+        std::cout << "]";
+    }
     // operator overloadings
     matrix operator+(const matrix m){
         auto N_row_add = N_row < m.N_row ? N_row : m.N_row;

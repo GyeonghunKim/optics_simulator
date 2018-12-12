@@ -190,6 +190,18 @@ public:
     auto get_dy(){
         return dy;
     }
+    auto get_x_min(){
+        return x_min;
+    }
+    auto get_y_min(){
+        return y_min;
+    }
+    auto get_x_max(){
+        return x_max;
+    }
+    auto get_y_max(){
+        return y_max;
+    }
 
     // value 2 index
     auto x2i(T x){
@@ -208,9 +220,22 @@ public:
         data.print_only_value();
         std::cout << std::endl;
     }
+    void print_matlab(){
+        data.print_matlab();
+        std::cout << std::endl;
+    }
     void print_only_value(){
         data.print_only_value();
         std::cout << std::endl;
     }
-
+    void box_smoothing(int kernel_rad = 1){
+        auto dat = data.get_data();
+        for(int i = kernel_rad; i < N_row - kernel_rad; ++i){
+            for(int j = kernel_rad; j < N_col - kernel_rad; ++j){
+                data.set_data(i, j, (dat[i - 1][j - 1] + dat[i][j - 1] + dat[i + 1][j - 1]
+                                    + dat[i - 1][j] + dat[i][j] + dat[i + 1][j]
+                                    + dat[i - 1][j + 1] + dat[i][j + 1] + dat[i + 1][j + 1])/9);
+            }
+        }
+    }
 };
