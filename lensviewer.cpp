@@ -31,7 +31,7 @@ lensViewer::~lensViewer()
 }
 void lensViewer::defaultSetting(QCustomPlot *customPlot){
     QCPColorMap *colorMap = new QCPColorMap(customPlot->xAxis, customPlot->yAxis);
-    QCPColorScale *colorScale = new QCPColorScale(customPlot);
+    // QCPColorScale *colorScale = new QCPColorScale(customPlot);
     this->customPlot = customPlot;
     this->colorMap = colorMap;
     this->colorScale = colorScale;
@@ -115,6 +115,7 @@ void lensViewer::on_tryButton_clicked()
 {
     std::cout << "removed" << std::endl;
     std::cout << customPlot->removePlottable(colorMap) << std::endl;
+
     // configure axis rect:
     customPlot->setInteractions(QCP::iRangeDrag|QCP::iRangeZoom); // this will also allow rescaling the color scale by dragging/zooming
     customPlot->axisRect()->setupFullAxesBox(true);
@@ -123,6 +124,7 @@ void lensViewer::on_tryButton_clicked()
 
     // set up the QCPColorMap:
     QCPColorMap *colorMap = new QCPColorMap(customPlot->xAxis, customPlot->yAxis);
+    // QCPColorScale *colorScale = new QCPColorScale(customPlot);
     int nx = ui->N_x->text().toInt();
     int ny = ui->N_y->text().toInt();
     colorMap->data()->setSize(nx, ny); // we want the color map to have nx * ny data points

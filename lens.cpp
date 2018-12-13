@@ -34,27 +34,39 @@ double lens_function(double x, double y, lens l, std::string lens_type){
         double x2 = l.center_x + l.d2 * std::cos(theta) + l.R_lens * std::sin(theta);
         double y2 = l.center_y + l.d2 * std::sin(theta) - l.R_lens * std::cos(theta);
 
-        double lin_lhs1 = (y - y1) * (x1 - x2);
-        double lin_rhs1 = (y1 - y2) * (x - x1);
+        double lin_lhs1 = (y - y1) * (x1 - x2) * (x1 - x2);
+        double lin_rhs1 = (y1 - y2) * (x - x1) * (x1 - x2);
 
-        if(lin_lhs1 <= lin_rhs1){
+        if(lin_lhs1 >= lin_rhs1){
             double x3 = l.center_x + l.d2 * std::cos(theta) - l.R_lens * std::sin(theta);
             double y3 = l.center_y + l.d2 * std::sin(theta) + l.R_lens * std::cos(theta);
             double x4 = l.center_x - l.d1 * std::cos(theta) - l.R_lens * std::sin(theta);
             double y4 = l.center_y - l.d1 * std::sin(theta) + l.R_lens * std::cos(theta);
 
-            double lin_lhs2 = (y - y4) * (x4 - x3);
-            double lin_rhs2 = (y4 - y3) * (x - x4);
+            double lin_lhs2 = (y - y4) * (x4 - x3) * (x4 - x3);
+            double lin_rhs2 = (y4 - y3) * (x - x4) * (x4 - x3);
 
-            if(lin_lhs2 >= lin_rhs2){
-                double xc1 = l.center_x - (l.param1 + l.thick / 2) * std::cos(theta);
-                double yc1 = l.center_y - (l.param1 + l.thick / 2) * std::sin(theta);
-                double xc2 = l.center_x + (l.param2 + l.thick / 2) * std::cos(theta);
-                double yc2 = l.center_y + (l.param2 + l.thick / 2) * std::sin(theta);
-                double r1_square = (x - xc1) * (x - xc1) + (y - yc1) * (y - yc1);
-                double r2_square = (x - xc2) * (x - xc2) + (y - yc2) * (y - yc2);
-                if(r1_square > l.param1 * l.param1 && r2_square > l.param2 * l.param2){
-                    return l.n;
+            if(lin_lhs2 <= lin_rhs2){
+                double lin_lhs3 = (y - y1) * (x1 - x4) * (x1 - x4);
+                double lin_rhs3 = (y1 - y4) * (x - x1) * (x1 - x4);
+                double lin_lhs4 = (y - y3) * (x2 - x3) * (x2 - x3);
+                double lin_rhs4 = (y2 - y3) * (x - x3) * (x2 - x3);
+                if(lin_lhs3 >= lin_rhs3 && lin_lhs4 <= lin_rhs4){
+                    if(x1 == x4){
+                        if(!(x >= x1 && x <= x2)){return 1;}
+                    }
+                    double xc1 = l.center_x - (l.param1 + l.thick / 2) * std::cos(theta);
+                    double yc1 = l.center_y - (l.param1 + l.thick / 2) * std::sin(theta);
+                    double xc2 = l.center_x + (l.param2 + l.thick / 2) * std::cos(theta);
+                    double yc2 = l.center_y + (l.param2 + l.thick / 2) * std::sin(theta);
+                    double r1_square = (x - xc1) * (x - xc1) + (y - yc1) * (y - yc1);
+                    double r2_square = (x - xc2) * (x - xc2) + (y - yc2) * (y - yc2);
+                    if(r1_square > l.param1 * l.param1 && r2_square > l.param2 * l.param2){
+                        return l.n;
+                    }
+                    else{
+                        return 1;
+                    }
                 }
                 else{
                     return 1;
