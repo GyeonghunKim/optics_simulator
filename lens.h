@@ -6,38 +6,56 @@
 
 class lens{
 private:
-    double center_x = 0, center_y = 0, rad1, rad2, R_lens, d1, d2, d, n;
+    double center_x = 0, center_y = 0, param1, param2, // for spherical lens, param1 and 2 radius, for hyperbolic lens, param1 and 2 is focus length
+            R_lens, d1, d2, d, n;
     point2D<double> align = {0, 0};
     scalarField<double> lens_body();
+    std::string lens_type;
 public:
     // default constructor
     lens() = default;
     // default location is origin
-    lens(double rad1, double rad2, double R_lens, double n){
+    lens(double param1, double param2, double R_lens, double n, std::string lens_type){
         center_x = 0;
         center_y = 0;
-        this->rad1 = rad1;
-        this->rad2 = rad2;
+        this->param1 = param1;
+        this->param2 = param2;
         this->R_lens = R_lens;
         this->n = n;
-        d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
-        d2 = -1 * std::sqrt(rad2 * rad2 - R_lens * R_lens);
-        d = this->d1 - this->d2;
+        this->lens_type = lens_type;
+        if(lens_type == "spherical_convex"){
+            d1 = std::sqrt(param1 * param1 - R_lens * R_lens);
+            d2 = -1 * std::sqrt(param2 * param2 - R_lens * R_lens);
+            d = this->d1 - this->d2;
+        }
+        else if(lens_type == "parabolic_convex"){
+            d1 = R_lens * R_lens / (4 * param1);
+            d2 = R_lens * R_lens / (4 * param2);
+            d = this->d1 + this->d2;
+        }
         align.set_x(1);
         align.set_y(0);
         align.normalize();
     }
     // default align is (1, 0)
-    lens(double center_x, double center_y, double rad1, double rad2, double R_lens, double n){
+    lens(double center_x, double center_y, double rad1, double rad2, double R_lens, double n, std::string lens_type){
         this->center_x = center_x;
         this->center_y = center_y;
-        this->rad1 = rad1;
-        this->rad2 = rad2;
+        this->param1 = rad1;
+        this->param2 = rad2;
         this->R_lens = R_lens;
         this->n = n;
-        d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
-        d2 = -1 * std::sqrt(rad2 * rad2 - R_lens * R_lens);
-        d = this->d1 - this->d2;
+        this->lens_type = lens_type;
+        if(lens_type == "spherical_convex"){
+            d1 = std::sqrt(param1 * param1 - R_lens * R_lens);
+            d2 = -1 * std::sqrt(param2 * param2 - R_lens * R_lens);
+            d = this->d1 - this->d2;
+        }
+        else if(lens_type == "parabolic_convex"){
+            d1 = R_lens * R_lens / (4 * param1);
+            d2 = R_lens * R_lens / (4 * param2);
+            d = this->d1 + this->d2;
+        }
         align.set_x(1);
         align.set_y(0);
         align.normalize();
@@ -46,8 +64,8 @@ public:
     lens(double center_x, double center_y, double rad1, double rad2, double R_lens, double n, point2D<double> p){
         this->center_x = center_x;
         this->center_y = center_y;
-        this->rad1 = rad1;
-        this->rad2 = rad2;
+        this->param1 = rad1;
+        this->param2 = rad2;
         this->R_lens = R_lens;
         this->n = n;
         d1 = std::sqrt(rad1 * rad1 - R_lens * R_lens);
@@ -58,9 +76,12 @@ public:
         align.normalize();
     }
 
+    auto get_lens_type(){
+        return lens_type;
+    }
     // return theoretical focus(with paraxial approx.)
     double get_thin_focus(){
-        return 1.0/((double(n) - 1.0) * (1.0/rad1 - 1.0/rad2));
+        return 1.0/((double(n) - 1.0) * (1.0/param1 - 1.0/param2));
     }
 
     //print spec of lens
@@ -68,15 +89,15 @@ public:
         std::cout << "lens_spec" << std::endl;
         std::cout << "center location: (" << center_x << ", " << center_y << ")" << std::endl;
         std::cout << "align direction: (" << align.get_x() << ", " << align.get_y() << ")" << std::endl;
-        std::cout << "rad1 : " << rad1 << std::endl;
-        std::cout << "rad2 : " << rad2 << std::endl;
+        std::cout << "rad1 : " << param1 << std::endl;
+        std::cout << "rad2 : " << param2 << std::endl;
         std::cout << "diameter : " << 2 * R_lens << std::endl;
         std::cout << "IOR: " << n << std::endl;
         std::cout << "thickness: " << d << "(" << d1 << " + " << d2 << " )" << std::endl;
         std::cout << "paraxial focus: " << get_thin_focus() << std::endl;
     }
 
-    friend double lens_function(double, double, lens);
+    friend double lens_function(double, double, lens, std::string);
 };
 
 

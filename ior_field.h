@@ -20,7 +20,9 @@ public:
             auto x = x_min + i * dx;
             for(auto j = 0; j < N_col; ++j){
                 auto y = y_min + j * dy;
-                tmp.set_data(i, j, lens_function(x, y, l));
+                tmp.set_data(i, j, lens_function(x, y, l, l.get_lens_type()));
+                // std::cout << "**************************" << std::endl;
+                // std::cout << lens_function(x, y, l, l.get_lens_type()) << std::endl;
             }
         }
         this->x_min = x_min;
@@ -57,9 +59,21 @@ public:
         y_min = m.get_y_min();
         x_max = m.get_x_max();
         y_max = m.get_y_max();
-
     }
 
+    ior_field(matrix<double> m,
+              double dx, double dy,
+              double x_min, double x_max, double y_min, double y_max){
+        this->data = m;
+        this->N_row = m.get_N_row();
+        this->N_col = m.get_N_col();
+        this->dx = dx;
+        this->dy = dy;
+        this->x_min = x_min;
+        this->y_min = y_min;
+        this->x_max = x_max;
+        this->y_max = y_max;
+    }
 
     // print functions
     void print(){
@@ -117,6 +131,11 @@ public:
         return a00 + a10 * ix + a01 * jy + a11 * ix * jy;
     }
 
+    ior_field operator+(ior_field m){
+        auto tmp = data.add_for_IOR_field(m.data);
+        ior_field tmpp(tmp, this->dx, this->dy, this->x_min, this->x_max, this->y_min, this->y_max);
+        return tmpp;
+    }
 
 };
 

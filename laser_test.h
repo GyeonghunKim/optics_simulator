@@ -4,7 +4,7 @@
 #include "ior_field.h"
 
 auto laser_test(){
-    lens l1(0, 0, 1, -1, 0.1, 1.5);
+    lens l1(0, 0, 1, -1, 0.1, 1.5, "spherical_convex");
     // l1.print_spec();
     ior_field field1(20, 20, -3 ,3, -3, 3, l1);
     // field1.print();

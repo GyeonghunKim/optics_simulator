@@ -28,7 +28,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     qcustomplot.cpp \
-    lens.cpp
+    lens.cpp \
+    lensviewer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,10 +49,12 @@ HEADERS += \
     ior_field_test.h \
     laser.h \
     laser_test.h \
-    qcustomplot.h
+    qcustomplot.h \
+    lensviewer.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    lensviewer.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -53,16 +53,17 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
 
 
   // setting Lens in optical table
-  lens l1(0, 0, 5, -5, 4, 1.5);
+  lens l1(0, 0, 2.25, 2.25, 3, 1.5, "parabolic_convex");
   l1.print_spec();
   ior_field field1(nx, ny, x_min, x_max, y_min, y_max, l1);
 
-  // lens l2(2, 0, 10, -10, 5, 1.5);
-  // l1.print_spec();
-  // ior_field field2(nx, ny, x_min, x_max, y_min, y_max, l1);
-  // ior_field field1(field0.get_data() + field2.get_data());
+  // lens l2(4, 0, 10, -10, 6, 1.5, "spherical_convex");
+  // l2.print_spec();
+  // ior_field field2(nx, ny, x_min, x_max, y_min, y_max, l2);
+  // ior_field field0 = field1 + field2;
+  ior_field field0 = field1;
   // field1.print();
-  auto IOR_matrix = field1.get_data();
+  auto IOR_matrix = field0.get_data();
   auto IOR = IOR_matrix.get_data();
   for (int xIndex=0; xIndex<nx; ++xIndex)
   {
@@ -95,11 +96,11 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
 
   std::cout << "setting lens OK" << std::endl;
 
-  for(int t = 0; t < 7; ++t){
+  for(int t = 0; t < 5; ++t){
   // setting laser1 in optical table
-  point2D<double> loc = {-5.0, -3.0 + t};
-  point2D<double> dir = {1, 0};
-  laser laser1(loc, dir, field1, 0.01);
+  point2D<double> loc = {-3, 1};
+  point2D<double> dir = {1, -0.5 + 0.25 * t};
+  laser laser1(loc, dir, field0, 0.01);
   laser1.activation();
   // laser1.get_loc().print();
   auto laser_loc = laser1.get_loc();

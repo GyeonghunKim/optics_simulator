@@ -1,12 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include <QMainWindow>
 #include "qcustomplot.h"
 
 namespace Ui {
 class MainWindow;
 }
+
 
 class MainWindow : public QMainWindow
 {
@@ -20,5 +19,3 @@ public:
 private:
     Ui::MainWindow *ui;
 };
-
-#endif // MAINWINDOW_H

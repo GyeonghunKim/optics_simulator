@@ -199,6 +199,16 @@ public:
         }
         return min_val;
     }
-
+    auto add_for_IOR_field(matrix<double> m){
+        matrix<double> ret(m);
+        for (auto i = 0; i < N_row; ++i) {
+            for (auto j = 0; j < N_col; ++j) {
+                if(data[i][j] != 1){
+                    ret.set_data(i, j, data[i][j]);
+                }
+            }
+        }
+        return ret;
+    }
     friend class lens_body;
 };
