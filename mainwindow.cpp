@@ -44,7 +44,7 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
   int ny = 3000;
   colorMap->data()->setSize(nx, ny); // we want the color map to have nx * ny data points
   double x_min = -8;
-  double x_max = 24;
+  double x_max = 8;
   double y_min = -8;
   double y_max = 8;
   colorMap->data()->setRange(QCPRange(x_min, x_max), QCPRange(y_min, y_max)); // and span the coordinate range -4..4 in both key (x) and value (y) dimensions
@@ -53,14 +53,14 @@ void MainWindow::drawIOR(QCustomPlot *customPlot)
 
 
   // setting Lens in optical table
-  lens l1(-2, 0, 10, -10, 5, 1.5);
+  lens l1(0, 0, 5, -5, 4, 1.5);
   l1.print_spec();
-  ior_field field0(nx, ny, x_min, x_max, y_min, y_max, l1);
+  ior_field field1(nx, ny, x_min, x_max, y_min, y_max, l1);
 
-  lens l2(2, 0, 10, -10, 5, 1.5);
-  l1.print_spec();
-  ior_field field2(nx, ny, x_min, x_max, y_min, y_max, l1);
-  ior_field field1(field0.get_data() + field2.get_data());
+  // lens l2(2, 0, 10, -10, 5, 1.5);
+  // l1.print_spec();
+  // ior_field field2(nx, ny, x_min, x_max, y_min, y_max, l1);
+  // ior_field field1(field0.get_data() + field2.get_data());
   // field1.print();
   auto IOR_matrix = field1.get_data();
   auto IOR = IOR_matrix.get_data();
