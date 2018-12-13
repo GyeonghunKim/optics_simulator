@@ -145,10 +145,17 @@ public:
                     thetaf = -1 * std::abs(std::asin(sin_thetaf));
                 }
                 if (std::isnan(thetaf)){
+                    auto new_dir = grad_c.rotate_halfpi();
+                    dir.add_point(new_dir);
+                    if((new_point.get_x() > x_min * 1.1 && new_point.get_y() > y_min * 1.1) && (new_point.get_x() < x_max * 0.9 && new_point.get_y() < y_max * 0.9)){
+                        loc.add_point(new_point);
+                        continue;
+                    }
+                    else{break;}
                     std::cout << "program stopped because thetaf is nan" << std::endl;
                     std::cout << "IOR loc_c is: " << get_IOR2(loc_c) << std::endl;
                     std::cout << "IOR new_point is: " << get_IOR2(new_point) << std::endl;
-                    break;
+                    // break;
                 }
                 std::cout << "loc is : " << std::endl;
                 loc_c.print_only_value();
