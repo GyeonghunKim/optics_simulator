@@ -7,7 +7,7 @@
 class lens{
 private:
     double center_x = 0, center_y = 0, param1, param2, // for spherical lens, param1 and 2 radius, for hyperbolic lens, param1 and 2 is focus length
-            R_lens, d1, d2, d, thick;
+            R_lens, d1, d2, d, thick, n;
     point2D<double> align = {0, 0};
     scalarField<double> lens_body();
     std::string lens_type;
@@ -37,7 +37,7 @@ public:
         else if(lens_type == "spherical_concave") {
             d1 = param1 + thick / 2 - std::sqrt(param1 * param1 - R_lens * R_lens);
             d2 = param2 + thick / 2 - std::sqrt(param2 * param2 - R_lens * R_lens);
-            d = this->d1 + this->d2
+            d = this->d1 + this->d2;
         }
         align.set_x(1);
         align.set_y(0);
@@ -66,7 +66,7 @@ public:
         else if(lens_type == "spherical_concave") {
             d1 = param1 + thick / 2 - std::sqrt(param1 * param1 - R_lens * R_lens);
             d2 = param2 + thick / 2 - std::sqrt(param2 * param2 - R_lens * R_lens);
-            d = this->d1 + this->d2
+            d = this->d1 + this->d2;
         }
         align.set_x(1);
         align.set_y(0);
@@ -95,7 +95,7 @@ public:
         else if(lens_type == "spherical_concave") {
             d1 = param1 + thick / 2 - std::sqrt(param1 * param1 - R_lens * R_lens);
             d2 = param2 + thick / 2 - std::sqrt(param2 * param2 - R_lens * R_lens);
-            d = this->d1 + this->d2
+            d = this->d1 + this->d2;
         }
         align.set_x(p.get_x());
         align.set_y(p.get_y());
@@ -123,7 +123,7 @@ public:
         else if(lens_type == "spherical_concave") {
             d1 = param1 + thick / 2 - std::sqrt(param1 * param1 - R_lens * R_lens);
             d2 = param2 + thick / 2 - std::sqrt(param2 * param2 - R_lens * R_lens);
-            d = this->d1 + this->d2
+            d = this->d1 + this->d2;
         }
         align.set_x(align_x);
         align.set_y(align_y);

@@ -62,7 +62,7 @@ void lensViewer::drawIOR(QCustomPlot *customPlot)
 
 
     // setting Lens in optical table
-    lens l1(0, 0, 2.25, 2.25, 3, 1.5, "parabolic_convex");
+    lens l1(0, 0, 2.25, 2.25, 3, 0, 1.5, "parabolic_convex");
     l1.print_spec();
     ior_field field1(nx, ny, x_min, x_max, y_min, y_max, l1);
 

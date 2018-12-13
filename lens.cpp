@@ -37,7 +37,7 @@ double lens_function(double x, double y, lens l, std::string lens_type){
         double lin_lhs1 = (y - y1) * (x1 - x2);
         double lin_rhs1 = (y1 - y2) * (x - x1);
 
-        if(lin_lhs1 > lin_rhs1){
+        if(lin_lhs1 <= lin_rhs1){
             double x3 = l.center_x + l.d2 * std::cos(theta) - l.R_lens * std::sin(theta);
             double y3 = l.center_y + l.d2 * std::sin(theta) + l.R_lens * std::cos(theta);
             double x4 = l.center_x - l.d1 * std::cos(theta) - l.R_lens * std::sin(theta);
@@ -45,7 +45,8 @@ double lens_function(double x, double y, lens l, std::string lens_type){
 
             double lin_lhs2 = (y - y4) * (x4 - x3);
             double lin_rhs2 = (y4 - y3) * (x - x4);
-            if(lin_lhs2 < lin_rhs2){
+
+            if(lin_lhs2 >= lin_rhs2){
                 double xc1 = l.center_x - (l.param1 + l.thick / 2) * std::cos(theta);
                 double yc1 = l.center_y - (l.param1 + l.thick / 2) * std::sin(theta);
                 double xc2 = l.center_x + (l.param2 + l.thick / 2) * std::cos(theta);
@@ -59,6 +60,12 @@ double lens_function(double x, double y, lens l, std::string lens_type){
                     return 1;
                 }
             }
+            else{
+                return 1;
+            }
+        }
+        else{
+            return 1;
         }
 
 
