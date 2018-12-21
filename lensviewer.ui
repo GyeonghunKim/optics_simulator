@@ -66,13 +66,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QRadioButton" name="Parabolic_concave">
-       <property name="text">
-        <string>Parabolic Concave Lens</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -162,7 +155,7 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>241</width>
+      <width>242</width>
       <height>71</height>
      </rect>
     </property>

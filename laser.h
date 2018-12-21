@@ -3,6 +3,8 @@
 #include "point2d_series.h"
 #include "scalar_field.h"
 #include "ior_field.h"
+#include "vector_field.h"
+#include "laser_device.h"
 
 class laser
 {
@@ -20,7 +22,7 @@ private:
     double dt;
     // ior_field
     matrix<double> table;
-    // velocity at n = 1
+    // velocity
     double c = 1;
     // ior_field table
     ior_field IOR_field;
@@ -46,6 +48,24 @@ public:
         std::cout << opt.get_x_min() << "\t" << opt.get_y_min() << std::endl;
     }
 
+    laser(laser_device dev, ior_field opt, double dt = 1){
+        this->loc.add_point(dev.get_loc());
+        this->dir.add_point(dev.get_dir());
+        this->vel.push_back(c);
+        this->N_rows = opt.get_N_row();
+        this->N_cols = opt.get_N_col();
+        this->x_min = opt.get_x_min();
+        this->x_max = opt.get_x_max();
+        this->y_min = opt.get_y_min();
+        this->y_max = opt.get_y_max();
+        this->dt = dt;
+        this->table = opt.get_data();
+        this->IOR_field = opt;
+        std::cout << "This is from constructor" << std::endl;
+        std::cout << opt.get_x_min() << "\t" << opt.get_y_min() << std::endl;
+    }
+
+
     // get IOR using interpolation
     auto get_IOR(point2D<double> p){
         auto dx = IOR_field.get_dx();
@@ -70,37 +90,17 @@ public:
     }
 
 
-    void activation(){
-        int i = 0;
+    void activation(int number_smoothing = 1){
         auto s_field_ior = scalarField<double>(IOR_field.get_data(), IOR_field.get_dx(), IOR_field.get_dy());
-        s_field_ior.box_smoothing();
+        s_field_ior.box_smoothing(number_smoothing);
         auto grad_ior_field = get_gradient<double>(s_field_ior);
-
-        // grad_ior_field.print_matlab();
         auto dx = IOR_field.get_dx();
-        // std::cout << "dx = " << dx << std::endl;
         auto dy = IOR_field.get_dy();
-        // int k = 1;
         while(true){
-
-            // std::cout << k << std::endl;
-            /*
-            if(++k > 2000){
-                break;
-            }
-            */
-            // std::cout << "i = " << i++ << std::endl;
 
             auto vel_c = vel.back();
             auto dir_c = dir.get_last();
             auto loc_c = loc.get_last();
-
-            /*
-            if(!((loc_c.get_x() > x_min * 1.1 && loc_c.get_y() > y_min * 1.1) && (loc_c.get_x() < x_max * 0.9 && loc_c.get_y() < y_max * 0.9))){
-                break;
-            }
-            */
-
             auto near = loc_c.get_near(x_min, y_min, dx, dy);
             auto weights = loc_c.get_weight();
             auto new_point = loc_c + vel_c * dir_c * dt;
@@ -128,9 +128,6 @@ public:
                 point2D<double> grad_c = {tp_x, tp_y};
                 grad_c.normalize();
                 auto tang_c = grad_c.rotate_halfpi();
-
-                // std::cout << "in" << std::endl;
-                // dir_c.set_y(dir_c.get_y() + 0.3);
                 dir_c.normalize();
 
                 auto thetai = grad_c.get_theta(dir_c);
@@ -145,13 +142,13 @@ public:
                     thetaf = -1 * std::abs(std::asin(sin_thetaf));
                 }
                 if (std::isnan(thetaf)){
-                    // auto new_dir = grad_c.rotate_halfpi();
-                    // dir.add_point(new_dir);
-                    // if((new_point.get_x() > x_min * 1.1 && new_point.get_y() > y_min * 1.1) && (new_point.get_x() < x_max * 0.9 && new_point.get_y() < y_max * 0.9)){
-                    //     loc.add_point(new_point);
-                    //     continue;
-                    // }
-                    // else{break;}
+                    auto new_dir = grad_c.rotate_halfpi();
+                    dir.add_point(new_dir);
+                    if((new_point.get_x() > x_min * 1.1 && new_point.get_y() > y_min * 1.1) && (new_point.get_x() < x_max * 0.9 && new_point.get_y() < y_max * 0.9)){
+                        loc.add_point(new_point);
+                        continue;
+                    }
+                    else{break;}
                     std::cout << "program stopped because thetaf is nan" << std::endl;
                     std::cout << "IOR loc_c is: " << get_IOR2(loc_c) << std::endl;
                     std::cout << "IOR new_point is: " << get_IOR2(new_point) << std::endl;
@@ -179,16 +176,7 @@ public:
                     auto new_dir = grad_c.rotate(thetaf);
                     dir.add_point(new_dir);
                 }
-
-                // std::cout << "nears" << std::endl;
-                // near[0].print();near[1].print();near[2].print();near[3].print();
-                // std::cout << weights[0] << "," <<  weights[1] << "," <<  weights[2] << "," << weights[3] << std::endl;
-                // std::cout << "grdient, " << cos_thetai << "\t" << sin_thetaf << std::endl;
-                // grad_c.print();
-                // tang_c.print();
-
             }
-
             if((new_point.get_x() > x_min * 1.1 && new_point.get_y() > y_min * 1.1) && (new_point.get_x() < x_max * 0.9 && new_point.get_y() < y_max * 0.9)){
                 loc.add_point(new_point);
             }

@@ -101,6 +101,7 @@ public:
         align.set_y(p.get_y());
         align.normalize();
     }
+    // get align with two double not point2D
     lens(double center_x, double center_y, double rad1, double rad2, double R_lens, double thick, double n, double align_x, double align_y, std::string lens_type){
         this->center_x = center_x;
         this->center_y = center_y;
@@ -151,7 +152,14 @@ public:
         std::cout << "thickness: " << d << "(" << d1 << " + " << d2 << " )" << std::endl;
         std::cout << "paraxial focus: " << get_thin_focus() << std::endl;
     }
-
+    std::string get_loc_str()
+    {
+        return "(" + std::to_string(center_x) + ", " + std::to_string(center_y) + ")";
+    }
+    std::string get_align_str()
+    {
+        return "(" + std::to_string(align.get_x()) + ", " + std::to_string(align.get_y()) + ")";
+    }
     friend double lens_function(double, double, lens, std::string);
 };
 

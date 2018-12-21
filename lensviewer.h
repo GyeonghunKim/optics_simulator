@@ -1,5 +1,6 @@
 #pragma once
 #include "qcustomplot.h"
+#include "lens.h"
 #include <QDialog>
 
 namespace Ui {
@@ -12,6 +13,7 @@ private:
     int nx, ny;
     double x_min, x_max, y_min, y_max;
     std::string lens_type;
+    lens l;
     Q_OBJECT
 private:
     QCustomPlot *customPlot = nullptr;
@@ -22,8 +24,8 @@ public:
     explicit lensViewer(QWidget *parent = nullptr);
     ~lensViewer();
   void defaultSetting(QCustomPlot *customPlot);
-  void drawIOR(QCustomPlot *customPlot);
-
+  lens get_lens();
+  std::string get_lens_type();
 private slots:
   void on_tryButton_clicked();
 
@@ -34,6 +36,8 @@ private slots:
   void on_Parabolic_convex_clicked();
 
   void on_Parabolic_concave_clicked();
+
+  void on_applyButton_clicked();
 
 private:
     Ui::lensViewer *ui;

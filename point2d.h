@@ -85,11 +85,11 @@ public:
         return tmp;
     }
     double get_theta(point2D<T> p){
-        this->print();
+        // this->print();
         // std::cout << "[" << this->x << ", " << this->y << "]" << std::endl;
 
         auto rot_this = this->rotate_halfpi();
-        rot_this.print();
+        // rot_this.print();
         // std::cout << "[" << rot_this.get_x() << ", " << rot_this.get_y() << "]" << std::endl;
 
         auto c1 = (this->x * p.get_x() + this->y * p.get_y()) / (this->norm2() * p.norm2());

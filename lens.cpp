@@ -19,7 +19,7 @@ double lens_function(double x, double y, lens l, std::string lens_type){
         double lhs1 = (x * std::sin(theta) - y * std::cos(theta)) * (x * std::sin(theta) - y * std::cos(theta));
         double rhs1 = 4 * l.param1 * (x * std::cos(theta) + y * std::sin(theta) + l.d1);
         double lhs2 = (x * std::sin(theta) - y * std::cos(theta)) * (x * std::sin(theta) - y * std::cos(theta));
-        double rhs2 = -4 * l.param1 * (x * std::cos(theta) + y * std::sin(theta) - l.d1);
+        double rhs2 = -4 * l.param2 * (x * std::cos(theta) + y * std::sin(theta) - l.d1);
         if (lhs1 < rhs1 && lhs2 < rhs2){
             return l.n;
         }
@@ -79,9 +79,5 @@ double lens_function(double x, double y, lens l, std::string lens_type){
         else{
             return 1;
         }
-
-
-
     }
 }
-
