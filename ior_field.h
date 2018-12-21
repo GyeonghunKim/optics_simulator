@@ -115,9 +115,6 @@ public:
     }
 
     double get_value_bilinear(double x, double y){
-        std::cout << "this is from get_value_bilinear" << std::endl;
-        std::cout << x_min << "\t" << x_max << std::endl;
-
         auto i = std::floor((x - x_min) / dx);
         auto i_float = (x - x_min) / dx;
         auto j = std::floor((y - y_min) / dy);

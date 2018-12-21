@@ -33,11 +33,13 @@ private slots:
 
   void on_Spherical_concave_clicked();
 
+  void on_custom_button_clicked();
+
   void on_Parabolic_convex_clicked();
 
-  void on_Parabolic_concave_clicked();
-
   void on_applyButton_clicked();
+
+
 
 private:
     Ui::lensViewer *ui;

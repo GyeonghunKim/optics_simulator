@@ -149,30 +149,30 @@ public:
                         continue;
                     }
                     else{break;}
-                    std::cout << "program stopped because thetaf is nan" << std::endl;
-                    std::cout << "IOR loc_c is: " << get_IOR2(loc_c) << std::endl;
-                    std::cout << "IOR new_point is: " << get_IOR2(new_point) << std::endl;
+                    // std::cout << "program stopped because thetaf is nan" << std::endl;
+                    // std::cout << "IOR loc_c is: " << get_IOR2(loc_c) << std::endl;
+                    // std::cout << "IOR new_point is: " << get_IOR2(new_point) << std::endl;
                     break;
                 }
-                std::cout << "loc is : " << std::endl;
-                loc_c.print_only_value();
-                std::cout << "grad is : " << std::endl;
-                grad_c.print_only_value();
-                std::cout << "thetaf is: " << thetaf << std::endl;
+                // std::cout << "loc is : " << std::endl;
+                // loc_c.print_only_value();
+                // std::cout << "grad is : " << std::endl;
+                // grad_c.print_only_value();
+                // std::cout << "thetaf is: " << thetaf << std::endl;
                 if(std::abs(thetai) > std::atan(1) * 2){
                     if(thetaf > 0){
-                        std::cout << "****************1********************" << std::endl;
+                        // std::cout << "****************1********************" << std::endl;
                         auto new_dir = grad_c.rotate(4 * std::atan(1) - thetaf);
                         dir.add_point(new_dir);
                     }
                     else{
-                        std::cout << "****************2********************" << std::endl;
+                        // std::cout << "****************2********************" << std::endl;
                         auto new_dir = grad_c.rotate(4 * std::atan(1) - thetaf);
                         dir.add_point(new_dir);
                     }
                 }
                 else{
-                     std::cout << "****************3********************" << std::endl;
+                     // std::cout << "****************3********************" << std::endl;
                     auto new_dir = grad_c.rotate(thetaf);
                     dir.add_point(new_dir);
                 }

@@ -38,8 +38,8 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>29</y>
+      <x>10</x>
+      <y>30</y>
       <width>241</width>
       <height>112</height>
      </rect>
@@ -66,6 +66,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QRadioButton" name="custom_button">
+       <property name="text">
+        <string>custom lens</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
   </widget>
@@ -73,7 +80,7 @@
    <property name="geometry">
     <rect>
      <x>630</x>
-     <y>280</y>
+     <y>310</y>
      <width>261</width>
      <height>161</height>
     </rect>
@@ -142,7 +149,7 @@
    <property name="geometry">
     <rect>
      <x>630</x>
-     <y>470</y>
+     <y>500</y>
      <width>261</width>
      <height>111</height>
     </rect>
@@ -223,7 +230,7 @@
    <property name="geometry">
     <rect>
      <x>630</x>
-     <y>590</y>
+     <y>620</y>
      <width>261</width>
      <height>41</height>
     </rect>
@@ -249,7 +256,7 @@
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>10</y>
+     <y>0</y>
      <width>561</width>
      <height>101</height>
     </rect>
@@ -413,7 +420,7 @@
    <property name="geometry">
     <rect>
      <x>620</x>
-     <y>440</y>
+     <y>480</y>
      <width>301</width>
      <height>20</height>
     </rect>
@@ -421,6 +428,28 @@
    <property name="text">
     <string>* Thickness of Lens is only for concave lens</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="horizontalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>280</y>
+     <width>241</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>Name of custom lens</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLineEdit" name="name_custom_lens"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <customwidgets>

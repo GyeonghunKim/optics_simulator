@@ -137,10 +137,12 @@ void lensViewer::on_Parabolic_convex_clicked()
     this->lens_type = "parabolic_convex";
 }
 
-void lensViewer::on_Parabolic_concave_clicked()
+void lensViewer::on_custom_button_clicked()
 {
-    this->lens_type = "parabolic_concave";
+    this->lens_type = ui->name_custom_lens->text().toStdString();
 }
+
+
 
 lens lensViewer::get_lens(){
     return this->l;
@@ -148,6 +150,9 @@ lens lensViewer::get_lens(){
 
 void lensViewer::on_applyButton_clicked()
 {
+    if(ui->custom_button->isChecked()){
+        this->lens_type = ui->name_custom_lens->text().toStdString();
+    }
     lensViewer::close();
 }
 

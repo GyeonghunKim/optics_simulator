@@ -1,4 +1,6 @@
 #include "lens.h"
+#include <cmath>
+
 double lens_function(double x, double y, lens l, std::string lens_type){
     if(lens_type == "spherical_convex"){
         double r1 = std::sqrt((x - l.d1 * l.align.get_x() - l.center_x) * (x - l.d1 * l.align.get_x() - l.center_x)
@@ -80,4 +82,31 @@ double lens_function(double x, double y, lens l, std::string lens_type){
             return 1;
         }
     }
+    else if(lens_type == "gaussian"){   // in this case, param1 = sigma_x of gaussian and param2 = sigma_y
+        auto amp = l.n - 1;
+        return 1 + amp * std::exp(-(x - l.center_x) * (x - l.center_x) / (2 * l.param1 * l.param1) - (y - l.center_y) * (y - l.center_y) / (2 * l.param2 * l.param2));
+    }
+    else if(lens_type == "mirage"){   // in this case, param1 = mean_value, param2 = gradient of IOR
+        double tmp = l.param1 - l.param2 * (y - l.center_y);
+        if (tmp < 1) return 1;
+        else return tmp;
+    }
+    else if(lens_type == "comp"){   // I don't know how real compressed lens act. so I just composite gaussian and sperical concave lens
+        // std::cout << "in comp" << std::endl;
+        auto d1 = std::sqrt(l.param1 * l.param1 - l.R_lens * l.R_lens);
+        auto d2 = -1 * std::sqrt(l.param2 * l.param2 - l.R_lens * l.R_lens);
+
+        double amp = 0.5;
+        double r1 = std::sqrt((x - d1 * l.align.get_x() - l.center_x) * (x - d1 * l.align.get_x() - l.center_x)
+                              + (y - d1 * l.align.get_y() - l.center_y) * (y - d1 * l.align.get_y() - l.center_y));
+        double r2 = std::sqrt((x - d2 * l.align.get_x() - l.center_x) * (x - d2 * l.align.get_x() - l.center_x)
+                              + (y - d2 * l.align.get_y() - l.center_y) * (y - d2 * l.align.get_y() - l.center_y));
+        if (r1 < std::abs(l.param1) && r2 < std::abs(l.param2)){
+            return l.n + amp * std::exp(-(x - l.center_x) * (x - l.center_x)/2 - (y - l.center_y) * (y - l.center_y)/5);
+        }
+        else{
+            return 1;
+        }
+    }
+
 }
